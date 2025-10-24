@@ -1,7 +1,6 @@
 create database bd_desafio_backend;
 use bd_desafio_backend;
 
-ALTER TABLE Cliente CHANGE IdCliente id_cliente INT NOT NULL AUTO_INCREMENT;
 
 create table Usuario(
 IdUsuario int primary key auto_increment not null,
@@ -141,7 +140,6 @@ SELECT * FROM telefone;
 SELECT * FROM cliente;
 
 DESC Email;
-ALTER TABLE Email DROP COLUMN id_cliente;
 
 
 
