@@ -1,5 +1,6 @@
 package com.desafio.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,8 +18,9 @@ public class Telefone {
     @Column(name = "Tipo", nullable = false)
     private Integer tipo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "IdCliente", nullable = false)
+    @JsonBackReference
     private Cliente cliente;
 
 

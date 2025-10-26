@@ -1,5 +1,6 @@
 package com.desafio.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public class Cliente {
     @Column(name = "Logradouro", nullable = false, length = 120)
     private String logradouro;
 
+    @Column(name = "Complemento", length = 100)
+    private String complemento;
+
     @Column(name = "Bairro", nullable = false, length = 80)
     private String bairro;
 
@@ -41,12 +45,16 @@ public class Cliente {
     @Column(name = "DataAtualizacao")
     private LocalDateTime dataAtualizacao;
 
+    // Relacionamentos
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Telefone> telefones = new ArrayList<>();
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Email> emails = new ArrayList<>();
 
+    // Métodos auxiliares
     public void addTelefone(Telefone telefone) {
         telefone.setCliente(this);
         this.telefones.add(telefone);
@@ -57,6 +65,7 @@ public class Cliente {
         this.emails.add(email);
     }
 
+    // Getters e setters
     public Long getId() {
         return id;
     }
@@ -95,6 +104,14 @@ public class Cliente {
 
     public void setLogradouro(String logradouro) {
         this.logradouro = logradouro;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
     public String getBairro() {
@@ -151,9 +168,5 @@ public class Cliente {
 
     public void setEmails(List<Email> emails) {
         this.emails = emails;
-    }
-
-    public String getComplemento() {
-        return "";
     }
 }

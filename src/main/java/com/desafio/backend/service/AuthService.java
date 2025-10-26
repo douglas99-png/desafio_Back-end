@@ -1,24 +1,54 @@
 package com.desafio.backend.service;
 
+import com.desafio.backend.config.JwtUtil;
+import com.desafio.backend.model.GrupoAcessoUsuario;
+import com.desafio.backend.model.Permissao;
 import com.desafio.backend.model.Usuario;
 import com.desafio.backend.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
 
-    public AuthService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    private JwtUtil jwtUtil; // 👈 injeta a instância
+
+
+    public AuthService(UsuarioRepository usuarioRepository, PasswordEncoder encoder) {
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.encoder = encoder;
     }
 
-    public boolean autenticar(String login, String senha) {
-        return usuarioRepository.findByLogin(login)
-                .map(user -> user.getSenha().equals(senha)) // simples: sem criptografia
-                .orElse(false);
+    public String autenticar(String login, String senha) {
+        Usuario usuario = usuarioRepository.findByLogin(login).orElse(null);
+
+        if (usuario == null) return null;
+        if (!usuario.getSenha().equals(senha)) return null; // senha em texto puro
+
+        List<String> permissoes = usuario.getGrupos().stream()
+                .map(gau -> gau.getGrupoAcesso()) // 👈 lambda simples, sem type inference
+                .flatMap(grupo -> grupo.getPermissoes().stream())
+                .map(gaPerm -> gaPerm.getPermissao().getNomePermissao())
+                .distinct()
+                .collect(Collectors.toList());
+
+
+
+        return jwtUtil.generateToken(login, permissoes); // 👈 agora funciona
     }
+    public List<String> buscarPermissoesPorUsuario(String login) {
+        return usuarioRepository.findPermissoesByLogin(login)
+                .stream()
+                .map(Permissao::getNomePermissao)
+                .collect(Collectors.toList());
+    }
+
+
 }

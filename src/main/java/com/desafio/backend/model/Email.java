@@ -1,5 +1,6 @@
 package com.desafio.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,8 +15,9 @@ public class Email {
     @Column(name = "Email", nullable = false, length = 120)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "IdCliente", nullable = false)
+    @JsonBackReference
     private Cliente cliente;
 
     public Long getId() { return id; }

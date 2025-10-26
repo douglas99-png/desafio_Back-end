@@ -1,28 +1,30 @@
 package com.desafio.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Usuario")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdUsuario")
-    private Long id;
+    private Integer id;
 
-    @Column(name = "Login", nullable = false, unique = true)
+    @Column(name = "Login")
     private String login;
 
-    @Column(name = "Senha", nullable = false)
+    @Column(name = "Senha")
     private String senha;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GrupoAcessoUsuario> grupos = new ArrayList<>();
 
-    public String getLogin() { return login; }
-    public void setLogin(String login) { this.login = login; }
-
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
 }
