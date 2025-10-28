@@ -10,4 +10,4 @@ Para rodar o projeto:
 
 Usuários para teste:  
 - admin / 123qwe!@#  
-- user / 123qwe123
+- padrao / 123qwe123
