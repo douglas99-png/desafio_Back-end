@@ -1,4 +1,4 @@
-Projeto Backend do desafio Sea Tecnologia.
+Projeto Backend do desafio.
 
 Desenvolvido em Java com Spring Boot e MySQL.  
 Implemente autenticação, cadastro de clientes e integração com a API ViaCEP.
