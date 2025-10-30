@@ -43,7 +43,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String username = jwtUtil.extractUsername(token);
         final Map<String, Object> claims = jwtUtil.extractAllClaims(token);
 
-        // 👇 Aqui adaptamos para o campo "permissoes" que vem no seu token
         List<String> permissoes = (List<String>) claims.get("authorities");
         if (permissoes == null) permissoes = Collections.emptyList();
 
