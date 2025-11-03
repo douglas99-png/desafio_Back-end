@@ -120,10 +120,10 @@ public class ClienteController {
             List<Cliente> clientes = clienteRepository.findAll();
 
             if (clientes.isEmpty()) {
-                return ResponseEntity.noContent().build(); // retorna 204 se não houver clientes
+                return ResponseEntity.noContent().build();
             }
 
-            return ResponseEntity.ok(clientes); // retorna 200 + lista de clientes
+            return ResponseEntity.ok(clientes);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError()
