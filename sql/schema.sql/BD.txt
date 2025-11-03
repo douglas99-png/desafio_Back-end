@@ -1,0 +1,152 @@
+create database bd_desafio_backend;
+use bd_desafio_backend;
+
+
+create table Usuario(
+IdUsuario int primary key auto_increment not null,
+Login varchar(60),
+Senha varchar(60) not null
+);
+
+INSERT INTO Usuario (Login, Senha) VALUES
+('admin', '123qwel@#'),
+('padrao', '123qwe123');
+
+
+create table Permissao(
+IdPermissao int primary key auto_increment not null,
+NomePermissao varchar(50) not null
+);
+
+INSERT INTO Permissao (NomePermissao) VALUES
+('INSERT'),
+('UPDATE'),
+('DELETE'),
+('SELECT');
+
+
+select * from Permissao;
+select * from usuario;
+
+CREATE TABLE  GrupoAcesso(
+IdGrupoAcesso int primary key auto_increment not null,
+NomeGrupo varchar(120) not null
+);
+
+INSERT INTO GrupoAcesso (NomeGrupo)
+values ('Administrador'),
+('Padrao');
+
+select * from GrupoAcesso;
+
+CREATE TABLE GrupoAcesso_Usuario(
+IdGrupoAcessoUsuario int primary key auto_increment not null,
+IdGrupoAcesso int not null,
+IdUsuario int not null,
+foreign key (IdUsuario) REFERENCES Usuario(IdUsuario),
+foreign key (IdGrupoAcesso) REFERENCES GrupoAcesso(IdGrupoAcesso));
+
+insert into GrupoAcesso_Usuario (IdGrupoAcesso,IdUsuario)
+values (1,1),
+(2,2);
+
+
+SHOW TABLES;
+
+CREATE TABLE GrupoAcesso_Permissao (
+  IdGrupoAcesso_Permissao INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  IdGrupoAcesso INT NOT NULL,
+  IdPermissao INT NOT NULL,
+  FOREIGN KEY (IdGrupoAcesso) REFERENCES GrupoAcesso(IdGrupoAcesso),
+  FOREIGN KEY (IdPermissao) REFERENCES Permissao(IdPermissao)
+);
+
+insert into GrupoAcesso_Permissao (IdGrupoAcesso,IdPermissao)
+values (1,1),
+(1,2),
+(1,3),
+(1,4),
+(2,4);
+
+
+SELECT U.Login,p.NomePermissao FROM usuario U
+join GrupoAcesso_Usuario gu on gu.IdUsuario = U.IdUsuario
+join GrupoAcesso_Permissao gp on gp.IdGrupoAcesso = gu.IdGrupoAcesso
+join Permissao p on p.IdPermissao = gp.IdPermissao;
+
+
+CREATE TABLE Cliente(
+IdCliente int primary key auto_increment not null,
+Nome varchar(100) not null,
+Cpf CHAR(11) not null,
+Cep char(8) not null,
+Logradouro varchar(120) not null,
+Complemento varchar(100) null,
+Bairro varchar(100) not null,
+Cidade varchar(60) not null,
+UF CHAR(2) not null,
+DataAtualizacao datetime not null,
+DataCadastro datetime not null);
+
+
+CREATE TABLE Email(
+IdEmail int primary key auto_increment not null,
+IdCliente int  not null,
+Email varchar(120) not null,
+foreign key (IdCliente) REFERENCES Cliente(IdCliente)
+);
+
+
+CREATE TABLE Telefone(
+IdTelefone int primary key auto_increment not null,
+Telefone varchar(11) not null,
+Tipo int not null,
+IdCliente int  not null,
+foreign key (IdCliente) REFERENCES Cliente(IdCliente)
+);
+
+
+
+
+-- INSERINDO CLIENTES
+INSERT INTO Cliente (Nome, Cpf, Cep, Logradouro, Complemento, Bairro, Cidade, UF, DataAtualizacao, DataCadastro)
+VALUES 
+('João Silva', '12345678901', '01001000', 'Rua das Flores', 'Apto 201', 'Centro', 'São Paulo', 'SP', NOW(), NOW()),
+('Maria Oliveira', '98765432100', '30140071', 'Avenida Brasil', NULL, 'Savassi', 'Belo Horizonte', 'MG', NOW(), NOW()),
+('Carlos Souza', '11122233344', '40020010', 'Rua do Comércio', 'Bloco B', 'Comércio', 'Salvador', 'BA', NOW(), NOW()),
+('Ana Costa', '55566677788', '70040900', 'Praça dos Três Poderes', NULL, 'Zona Cívico-Administrativa', 'Brasília', 'DF', NOW(), NOW());
+
+-- INSERINDO EMAILS (relacionados aos clientes)
+INSERT INTO Email (IdCliente, Email)
+VALUES
+(1, 'joao.silva@email.com'),
+(2, 'maria.oliveira@email.com'),
+(3, 'carlos.souza@email.com'),
+(4, 'ana.costa@email.com');
+
+-- INSERINDO TELEFONES (1 residencial = tipo 1, 2 móvel = tipo 2)
+INSERT INTO Telefone (Telefone, Tipo, IdCliente)
+VALUES
+('11987654321', 2, 1),
+('1134567890', 1, 1),
+('31988887777', 2, 2),
+('7133334444', 1, 3),
+('61999998888', 2, 4);
+
+SELECT DATABASE();
+USE bd_desafio_backend;
+SHOW TABLES;
+SELECT * FROM telefone;
+SELECT * FROM cliente;
+
+DESC Email;
+
+
+
+
+
+
+
+
+
+
